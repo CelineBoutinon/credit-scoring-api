@@ -1,0 +1,9 @@
+name: credit_scoring_bento
+python:
+  packages:
+    - bentoml>=1.0
+    - scikit-learn>=1.0
+    - lightgbm>=1.0
+    - mlflow>=1.0
+    - imbalanced-learn>=1.0
+service: "service:creditclassifier"
