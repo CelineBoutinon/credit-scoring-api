@@ -2,6 +2,8 @@ import flask
 from flask import Flask, request, jsonify
 import pandas as pd
 import joblib
+import mlflow
+import mlflow.pyfunc
 
 
 app = Flask(__name__)
@@ -11,13 +13,16 @@ app.config["DEBUG"] = True
 data_path = "..\..\PROJET 7\X_test_final.csv"
 client_data=pd.read_csv(data_path)
 
+# model_uri = <TBD>
+# model = mlflow.pyfunc.load_model(model_uri)
+
 
 # Get cwd
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Charge model outside of if __name__ == "__main__" clause:
 model_path = os.path.join(current_directory, "..", "Simulations", "Best_model", "model.pkl")
-model = joblib.load() # load champion
+model = joblib.load(model_path) # load champion
 
 @app.route('/', methods=['GET'])
 def home():
@@ -52,25 +57,32 @@ def api_id():
     # modify return to include only demographis such as income type, employment sector, year birth as age, M/F, white collar, upper ed, married
 
  
-@app.route("/predict/<id>", methods=['POST']) # or ['GET'] ??
-def predict():
-    data = request.json
+@app.route("/predict/<id>", methods=['GET'])
+def predict(id): # Get `id` directly from the URL
+    # Load client data
+    client_particulars = client_data.iloc[[int(id)]] # .values ? is request needed at all?
 
-    # e=Get xclient id from url
-    id = request.args.get('id_client', default=42, type=int)
+    # data = request.json
+
+    # Get xclient id from url
+    # id = request.args.get('id_client', default=42, type=int)
+
+    # Example URL: /predict/42 or /predict?id_client=42 - USE EITHER
+    # id_from_url = request.view_args.get('id')  # From `<id>` in URL
+    # id_from_query = request.args.get('id_client')  # From query string
     
     # Build relative path to client test data
-    csv_path = os.path.join(current_directory, "..", "Simulations", "Data", "df_train.csv")
+    csv_path = os.path.join(current_directory, "..", "xx", "xx", "X_test_final.csv")
 
     # Load test data
     client_data = pd.read_csv(csv_path)
-    client_particulars = client_data.iloc[[id]] # .values ?
+    # client_particulars = client_data.iloc[[id]] # .values ?
 
     # Consider dropping df index for prediction
     
     # Prédire
-    prediction = model.predict_proba(client_particulars) #.predict not predict_proba?
-    proba = prediction[0][1] # prediction[0][0] is proba of client NOT defaulting
+    prediction = model.predict_proba(client_particulars) #.predict not .predict_proba?
+    proba = prediction[1] # prediction[0][0] is proba of client NOT defaulting
     if proba > 0.502:
         proba_class = 1
         decision = "Reject loan application."
