@@ -1,9 +1,10 @@
-import flask
+# import flask
 from flask import Flask, request, jsonify
 import pandas as pd
 import joblib
-import mlflow
-import mlflow.pyfunc
+# import mlflow
+# import mlflow.pyfunc
+
 
 
 app = Flask(__name__)
@@ -32,17 +33,17 @@ def home():
 <p>Use predict/client?id=<ID to retrieve client credit application decision.</p>'''
 
 
-@app.route('/client', methods=['GET'])
-def api_id():
+@app.route('/client/<int:id>', methods=['GET'])
+def api_id(id):
     # Check client basic demographics
-    if 'id' in request.args:
-        try:
+    # if 'id' in request.args:
+    #     try:
             # Convert ID to integer
-            id = int(request.args['id'])
-        except ValueError:
-            return "Error: Client id must contain only digits (max. 5).", 400
-    else:
-        return "Error: Please provide a client id.", 400
+    #         id = int(request.args['id']) # or request.args.get('id') ?
+    #     except ValueError:
+    #         return "Error: Client id must contain only digits (max. 5).", 400
+    # else:
+    #     return "Error: Please provide a client id.", 400
     
         # Ensure client id exists in test data
     if id < 0 or id >= len(client_data):            
@@ -57,10 +58,11 @@ def api_id():
     # modify return to include only demographis such as income type, employment sector, year birth as age, M/F, white collar, upper ed, married
 
  
-@app.route("/predict/<id>", methods=['GET'])
+@app.route("/predict/<int:id>", methods=['GET'])
 def predict(id): # Get `id` directly from the URL
     # Load client data
-    client_particulars = client_data.iloc[[int(id)]] # .values ? is request needed at all?
+    # client_particulars = client_data.iloc[[int(id)]] 
+    client_particulars = client_data.iloc[[id]] # .values ? is request needed at all?
 
     # data = request.json
 
@@ -99,12 +101,6 @@ def predict(id): # Get `id` directly from the URL
         'class': proba_class,
         'decision': decision
     })
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
