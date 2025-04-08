@@ -7,7 +7,9 @@ import pandas as pd
 from bentoml.models import BentoModel
 
 # Define the runtime environment for the Bento
-demo_image = bentoml.images.PythonImage(python_version="3.13.2").python_packages("mlflow", "lightgbm")
+demo_image = bentoml.images.PythonImage(python_version="3.13.2")\
+    .python_packages("scikit-learn", "joblib", "lightgbm", "mlflow", "numpy", "imbalanced-learn", "imblearn", "pandas")\
+    .requirements_file('requirements.txt')
 
 @bentoml.service(
     image=demo_image,
