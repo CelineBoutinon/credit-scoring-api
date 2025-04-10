@@ -1,15 +1,11 @@
 # launch app locally by running flask --app api.py run --debug from the command line
-# web app : http://<fansiling888>.pythonanywhere.com/
+# web app : 
 
-# import flask
+
 from flask import Flask, request, jsonify
 import git
 from joblib import dump, load
-import numpy as np
-import os
 import pandas as pd
-# import mlflow
-# import mlflow.pyfunc
 
 app = Flask(__name__)
 
@@ -23,22 +19,15 @@ def webhook():
     else:   
         return 'Wrong event type', 400
 
-# app.config["DEBUG"] = True
-
 # Load client test data
-# data_path = "..\..\PROJET 7\X_test_final.csv"
 client_data=pd.read_csv('X_test_final.csv')
 
-# model_uri = <TBD>
-# model = mlflow.pyfunc.load_model(model_uri)
+# Load model
+model = load('final_model.joblib')
 
+# Load custom threshold
+custom_threshold = load('optimal_threshold.joblib')
 
-# Get cwd
-# current_directory = os.path.dirname(os.path.abspath(__file__))
-
-# Charge model outside of if __name__ == "__main__" clause:
-# model_path = os.path.join(current_directory, "..", "Simulations", "Best_model", "model.pkl")
-model = load('final_model.joblib') # load champion
 
 @app.route('/', methods=['GET'])
 def home():
@@ -85,9 +74,10 @@ def predict(id): # Get `id` directly from the URL
     client_particulars = client_data.iloc[[id-1]] # .values ? is request needed at all?
 
     # Predict outcome of client credit application
-    prediction = model.predict_proba(client_particulars) # model.predict(client_particulars) directly returns class 0 (no default) or 1 (default)
+    prediction = model.predict_proba(client_particulars) # model.predict(client_particulars) directly returns class 0 (no default)
+    # or class 1 (default)
     proba = prediction[0][1] # prediction[0][0] is proba of client NOT defaulting
-    if proba > 0.502:
+    if proba > custom_threshold:
         proba_class = 'default'
         decision = "reject loan application"
     else:
@@ -95,7 +85,6 @@ def predict(id): # Get `id` directly from the URL
         decision = "grant loan"
 
     # shap won't work with MLFlow pyfunc model => load pre-calculated Shap values for test data
-    # shap_values_all = pd.read_csv ('shap_values_test.csv')
     shap_values_all = pd.DataFrame(load('shap_values_test.joblib'))
 
     shap_values_client = shap_values_all.iloc[[id-1]]
@@ -121,6 +110,4 @@ def predict(id): # Get `id` directly from the URL
 
 
 if __name__ == "__main__":
-    # port = os.environ.get("PORT", 5000)
-    # app.run(debug=False, host="0.0.0.0", port=int(port))
     app.run()
