@@ -18,6 +18,7 @@ model = load('final_model.joblib')
 custom_threshold = load('optimal_threshold.joblib')
 
 
+
 @app.route('/', methods=['GET'])
 def home():
     return '''<h1>Credit Scoring</h1>
@@ -78,6 +79,7 @@ def predict(id): # Get `id` directly from the URL
 
     shap_values_client = shap_values_all.iloc[[id-1]]
     abs_values = shap_values_client.abs()
+    expected_value = load('expected_value.joblib')
 
     # identify top 5 shap values for client prediction
     top_5_indices = abs_values.iloc[0].nlargest(5).index.values.tolist()
@@ -94,7 +96,8 @@ def predict(id): # Get `id` directly from the URL
         'Client default probability': proba, 
         'Class': proba_class,
         'Decision': decision,
-        'Key Decision Factors': sorted_top_5_dict
+        'Key Decision Factors': sorted_top_5_dict,
+        'Expected Shap Value' : expected_value
     })
 
 
