@@ -10,7 +10,7 @@ import pandas as pd
 # import mlflow.pyfunc
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 
 # Load client test data
 # data_path = "..\..\PROJET 7\X_test_final.csv"
@@ -39,23 +39,13 @@ def home():
 
 @app.route('/client/<int:id>', methods=['GET'])
 def api_id(id):
-    # Display summary client demographics
-
-    # if 'id' in request.args:
-    #     try:
-            # Convert ID to integer
-    #         id = int(request.args['id']) # or request.args.get('id') ?
-    #     except ValueError:
-    #         return "Error: Client id must contain only digits (max. 5).", 400
-    # else:
-    #     return "Error: Please provide a client id.", 400
-    
-        # Ensure client id exists in test data
+    # Ensure client id exists in test data
     if (id-1) >= client_data.shape[0]:            
         return "Error: Client id not in application database. Enter a whole number between 1 and 46128.", 404
     if ((id-1) < 0):
         return "Error: Client id not in application database. Enter a whole number between 1 and 46128.", 404
 
+    # Display summary client demographics
     result_cols = ['INCOME_TYPE', 'EMPLOYMENT_SECTOR', 'DISPOSABLE_INCOME_per_capita', 'YEAR_BIRTH', 'CREDIT_RATING', 'CLIENT_BAD_CREDIT_HISTORY', 'CLIENT_FRAUD_FLAG',
                    'IS_MALE', 'WHITE_COLLAR', 'UPPER_EDUCATION', 'IS_MARRIED', 'LIVES_INDEPENDENTLY']
     results = []
@@ -82,25 +72,8 @@ def predict(id): # Get `id` directly from the URL
     client_particulars = client_data.iloc[[int(id-1)]] 
     client_particulars = client_data.iloc[[id-1]] # .values ? is request needed at all?
 
-    # data = request.json
-
-    # Get xclient id from url
-    # id = request.args.get('id_client', default=42, type=int)
-
-    # Example URL: /predict/42 or /predict?id_client=42 - USE EITHER
-    # id_from_url = request.view_args.get('id')  # From `<id>` in URL
-    # id_from_query = request.args.get('id_client')  # From query string
-    
-    # Build relative path to client test data
-    # csv_path = os.path.join(current_directory, "..", "xx", "xx", "X_test_final.csv")
-
-    # Load test data
-    # client_data = pd.read_csv(csv_path)
-    # client_particulars = client_data.iloc[[id]] # .values ?
-
-    
     # Predict outcome of client credit application
-    prediction = model.predict_proba(client_particulars)
+    prediction = model.predict_proba(client_particulars) # model.predict(client_particulars) directly returns clASS 0 (no default) or 1 (default)
     proba = prediction[0][1] # prediction[0][0] is proba of client NOT defaulting
     if proba > 0.502:
         proba_class = 'default'
