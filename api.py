@@ -1,7 +1,9 @@
-# launch app by running flask --app api.py run --debug from the command line
+# launch app locally by running flask --app api.py run --debug from the command line
+# web app : http://<fansiling888>.pythonanywhere.com/
 
 # import flask
 from flask import Flask, request, jsonify
+import git
 import joblib
 import numpy as np
 import os
@@ -10,6 +12,17 @@ import pandas as pd
 # import mlflow.pyfunc
 
 app = Flask(__name__)
+
+@app.route('/update_server', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('path/to/git_repo')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:   
+        return 'Wrong event type', 400
+
 # app.config["DEBUG"] = True
 
 # Load client test data
