@@ -4,7 +4,7 @@
 # import flask
 from flask import Flask, request, jsonify
 import git
-import joblib
+from joblib import dump, load
 import numpy as np
 import os
 import pandas as pd
@@ -38,7 +38,7 @@ client_data=pd.read_csv('X_test_final.csv')
 
 # Charge model outside of if __name__ == "__main__" clause:
 # model_path = os.path.join(current_directory, "..", "Simulations", "Best_model", "model.pkl")
-model = joblib.load('final_model.joblib') # load champion
+model = load('final_model.joblib') # load champion
 
 @app.route('/', methods=['GET'])
 def home():
@@ -95,8 +95,9 @@ def predict(id): # Get `id` directly from the URL
         decision = "grant loan"
 
     # shap won't work with MLFlow pyfunc model => load pre-calculated Shap values for test data
-    shap_values_all = pd.read_csv ('shap_values_test.csv')
-    
+    # shap_values_all = pd.read_csv ('shap_values_test.csv')
+    shap_values_all = pd.DataFrame(load('shap_values_test.joblib'))
+
     shap_values_client = shap_values_all.iloc[[id-1]]
     abs_values = shap_values_client.abs()
 
@@ -106,14 +107,16 @@ def predict(id): # Get `id` directly from the URL
     top_5_dict = {}
     for top_k, top_v in zip(top_5_indices, top_5_columns[0]):
         top_5_dict[top_k] = top_v
-    
+
+    sorted_top_5_dict = sorted(top_5_dict.items(), key=lambda top_5_dict: top_5_dict[1], reverse=True)
+
     # Return application decision
     return jsonify({
         'Client id': id,
         'Client default probability': proba, 
         'Class': proba_class,
         'Decision': decision,
-        'Key Decision Factors': top_5_dict
+        'Key Decision Factors': sorted_top_5_dict
     })
 
 
