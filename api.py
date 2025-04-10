@@ -98,7 +98,6 @@ def predict(id): # Get `id` directly from the URL
     # client_data = pd.read_csv(csv_path)
     # client_particulars = client_data.iloc[[id]] # .values ?
 
-    # Consider dropping df index for prediction
     
     # Predict outcome of client credit application
     prediction = model.predict_proba(client_particulars)
