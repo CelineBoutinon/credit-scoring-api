@@ -3,7 +3,6 @@
 
 
 from flask import Flask, request, jsonify
-import git
 from joblib import dump, load
 import pandas as pd
 
