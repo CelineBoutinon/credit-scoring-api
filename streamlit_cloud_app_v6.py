@@ -19,7 +19,7 @@ st.write(f"You selected client application: {selected_value}")
 # to avoid errors related to distutils (discontinued in Python 3.12 onwards).
 
 # Send a POST request to the API using the selected value
-response = requests.post(f"https://credit-scoring-api-0p1u.onrender.com/predict/{selected_value}")
+response = requests.get(f"https://credit-scoring-api-0p1u.onrender.com/predict/{selected_value}")
 
 # Display the response from the API (optional)
 if response.status_code == 200:
