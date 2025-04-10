@@ -82,11 +82,10 @@ def api_id(id):
 @app.route("/predict/<int:id>", methods=['GET'])
 def predict(id): # Get `id` directly from the URL
     # Load client data
-    client_particulars = client_data.iloc[[int(id-1)]] 
     client_particulars = client_data.iloc[[id-1]] # .values ? is request needed at all?
 
     # Predict outcome of client credit application
-    prediction = model.predict_proba(client_particulars) # model.predict(client_particulars) directly returns clASS 0 (no default) or 1 (default)
+    prediction = model.predict_proba(client_particulars) # model.predict(client_particulars) directly returns class 0 (no default) or 1 (default)
     proba = prediction[0][1] # prediction[0][0] is proba of client NOT defaulting
     if proba > 0.502:
         proba_class = 'default'
@@ -95,14 +94,26 @@ def predict(id): # Get `id` directly from the URL
         proba_class = 'no default'
         decision = "grant loan"
 
-    # shap won't work with MLFlow pyfunc model
+    # shap won't work with MLFlow pyfunc model => load pre-calculated Shap values for test data
+    shap_values_all = pd.read_csv ('shap_values_test.csv')
+    
+    shap_values_client = shap_values_all.iloc[[id-1]]
+    abs_values = shap_values_client.abs()
+
+    # identify top 5 shap values for client prediction
+    top_5_indices = abs_values.iloc[0].nlargest(5).index.values.tolist()
+    top_5_columns = shap_values_client[top_5_indices].values.tolist()
+    top_5_dict = {}
+    for top_k, top_v in zip(top_5_indices, top_5_columns[0]):
+        top_5_dict[top_k] = top_v
     
     # Return application decision
     return jsonify({
         'Client id': id,
         'Client default probability': proba, 
         'Class': proba_class,
-        'Decision': decision
+        'Decision': decision,
+        'Key Decision Factors': top_5_dict
     })
 
 
