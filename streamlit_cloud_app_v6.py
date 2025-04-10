@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import json
 
 # Streamlit UI
 st.title("Welcome to the ")
@@ -26,7 +27,11 @@ data = json.loads(response)
 # Display the response from the API (optional)
 if response.status_code == 200:
     # st.write(f"API Response: {response.text}")
+    st.write(f"Client Application No.: {data['Client id']}")
+    st.write(f"Client default probability: {data['Client default probability']}")
     st.write(f"Class: {data['Class']}")
+    st.write(f"Decision: {data['Decision']}")
+    #st.write(f": {data['']}")
 
 
 
