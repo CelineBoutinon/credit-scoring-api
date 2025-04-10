@@ -20,12 +20,25 @@ st.write(f"You selected client application: {selected_value}")
 
 # Send a POST request to the API using the selected value
 response = requests.get(f"https://credit-scoring-api-0p1u.onrender.com/predict/{selected_value}")
+data = json.loads(response)
+
 
 # Display the response from the API (optional)
 if response.status_code == 200:
-    st.write(f"API Response: {response.text}")
+    # st.write(f"API Response: {response.text}")
+    st.write(f"Class: {data['Class']}")
+
+
+
+
+
+
 else:
     st.error(f"Failed to fetch data. Status code: {response.status_code}")
+
+
+
+
 
 # Main function placeholder (optional)
 def main():
