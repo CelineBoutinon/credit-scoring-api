@@ -23,11 +23,12 @@ st.write(f"You selected client application: {selected_value}")
 
 # Send a POST request to the API using the selected value
 app_response = requests.get(f"https://credit-scoring-api-0p1u.onrender.com/predict/{selected_value}")
-app_data = json.loads(app_response)
+app_data = app_data = app_response.json()  
 
 
 # Display the response from the API (optional)
 if app_response.status_code == 200:
+    app_data = app_data = app_response.json()
     # st.write(f"API Response: {response.text}")
 
     # st.write(f"Client Application No.: {data['Client id']}")
