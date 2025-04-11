@@ -98,7 +98,7 @@ def predict(id): # Get `id` directly from the URL
         'Decision': decision,
         'Key Decision Factors': sorted_top_5_dict,
         'Expected Shap Value' : expected_value
-    })
+    }, shap_values_client)
 
 
 if __name__ == "__main__":
