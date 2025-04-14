@@ -1,67 +1,67 @@
+# to run app locally, navigate to C:\Users\celin\DS Projets Python\OCDS-repos-all\credit-scoring-api>
+# in the command line and run  py -m streamlit run streamlit_cloud_app_v6.py
+# IMPORTANT: In advanced settings, choose Python 3.10 when deploying the app in Streamlit Cloud
+# to avoid errors related to distutils (discontinued from Python 3.12 onwards).
+
 import streamlit as st
 import requests
 import json
 import shap
 import matplotlib.pyplot as plt
+import numpy as np
 
-# Streamlit UI
+# Display title & company logo
 st.title("Welcome to the ")
 st.image("logo.png")
 st.title("Credit Scoring App!")
 
-# Select client credit application reference
-selected_value = st.select_slider(
-    "Select a client credit application reference:",
-    options=range(1, 46128)
-)
+# Get user to select client credit application reference
+# selected_value = st.select_slider("Select a client credit application reference:", options=range(1, 46128))
+selected_value = st.number_input("Enter a client credit application reference:", min_value=1, max_value=46128)
 
-# Display the selected value
+# Display the selected client credit application reference
 st.write(f"You selected client application: {selected_value}")
 
-# IMPORTANT: In advanced settings, choose Python 3.10 when deploying the app in Streamlit Cloud
-# to avoid errors related to distutils (discontinued in Python 3.12 onwards).
-
-# Send a POST request to the API using the selected value
+# Send a get request to the API using the selected client credit application reference
 app_response = requests.get(f"https://credit-scoring-api-0p1u.onrender.com/predict/{selected_value}")
-app_data = app_data = app_response.json()  
+app_data = app_response.json()  
+shap_values_client_json = app_data["Shap values client"]
+shap_values_client_dict = json.loads(shap_values_client_json)[0]
+shap_values_array = np.array(list(shap_values_client_dict.values()))
+feature_names = list(shap_values_client_dict.keys())
+base_value = app_data.get("Expected Shap Value") 
 
 
 # Display the response from the API (optional)
 if app_response.status_code == 200:
-    app_data = app_data = app_response.json()
-    # st.write(f"API Response: {response.text}")
-
-    # st.write(f"Client Application No.: {data['Client id']}")
-    # st.write(f"Client default probability: {data['Client default probability']}")
-    # st.write(f"Class: {data['Class']}")
-    # st.write(f"Decision: {data['Decision']}")
-    
-    st.write(app_data)
+    # st.write(f"App data: {app_data}")
+    # st.write("Client id:", app_data['Client id'])  
+    st.write("Client default probability :", app_data['Client default probability'])
+    st.write("Class :", app_data['Class'])
+    st.write("Decision :", app_data['Decision'])
 
 else:
-    st.error(f"Failed to fetch data. Status code: {app_response.status_code}")
+    st.error(f"Failed to fetch data. Status code : {app_response.status_code}")
 
+# Create SHAP explanation object
+if shap_values_array is not None:
+    shap_explanation = shap.Explanation(values=shap_values_array, 
+                                        base_values=base_value,
+                                        feature_names=feature_names)
 
-# if shap_values is not None:
-#                 # Create SHAP waterfall plot for the first prediction
-#                 fig, ax = plt.subplots(figsize=(10,6))
-#                 st.title(f"Key decision factors for client {index} :")
-#                 shap.plots.waterfall(shap.Explanation(values=shap_values[index],
-#                                                             base_values=explainer.expected_value,
-#                                                             data=X_test.loc[index],
-#                                                             feature_names=X_test.columns),
-#                                                             show=True,
-#                                                             max_display=6)
-#                 st.pyplot(fig)
+    # Create SHAP waterfall plot using matplotlib
+    fig, ax = plt.subplots(figsize=(10,6))
+    st.title(f"Key decision factors for client {app_data['Client id']} :")
+    shap.plots.waterfall(shap_explanation, max_display=6)
+    
+    st.pyplot(fig)
 
+else: 
+    st.error(f"Failed to fetch Shap values for client application. Status code : {app_response.status_code}")
 
+# Main function placeholder
+# def main():
+#     pass
 
-
-
-
-# Main function placeholder (optional)
-def main():
-    pass
-
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

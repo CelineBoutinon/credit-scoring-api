@@ -1,5 +1,5 @@
 # launch app locally by running flask --app api.py run --debug from the command line
-# web app : 
+# web app available at https://credit-scoring-api-0p1u.onrender.com
 
 
 from flask import Flask, request, jsonify
