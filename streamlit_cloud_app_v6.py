@@ -1,6 +1,7 @@
-# to run app locally, navigate to C:\Users\celin\DS Projets Python\OCDS-repos-all\credit-scoring-api>
+# To run app locally, navigate to C:\Users\celin\DS Projets Python\OCDS-repos-all\credit-scoring-api>
 # in the command line and run  py -m streamlit run streamlit_cloud_app_v6.py
-# IMPORTANT: In advanced settings, choose Python 3.10 when deploying the app in Streamlit Cloud
+# App runs on Streamlit Community Cloud at https://credit-scoring-app-0p1u.streamlit.app/
+# IMPORTANT: In advanced settings, choose Python 3.10 when deploying the app in Streamlit Community Cloud
 # to avoid errors related to distutils (discontinued from Python 3.12 onwards).
 
 import streamlit as st
@@ -51,7 +52,7 @@ if shap_values_array is not None:
 
     # Create SHAP waterfall plot using matplotlib
     fig, ax = plt.subplots(figsize=(10,6))
-    st.title(f"Key decision factors for client {app_data['Client id']} :")
+    st.title(f"Key decision factors for client {app_data['Client id']}")
     shap.plots.waterfall(shap_explanation, max_display=6)
     
     st.pyplot(fig)
