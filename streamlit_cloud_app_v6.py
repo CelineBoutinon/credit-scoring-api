@@ -36,7 +36,7 @@ base_value = app_data.get("Expected Shap Value")
 if app_response.status_code == 200:
     # st.write(f"App data: {app_data}")
     # st.write("Client id:", app_data['Client id'])  
-    st.write("Client default probability :", app_data['Client default probability'])
+    st.write(f"Client default probability: {app_data['Client default probability'] * 100:.2f}%")
     st.write("Class :", app_data['Class'])
     st.write("Decision :", app_data['Decision'])
 
