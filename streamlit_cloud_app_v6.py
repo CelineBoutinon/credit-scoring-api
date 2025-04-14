@@ -60,8 +60,8 @@ else:
     st.error(f"Failed to fetch Shap values for client application. Status code : {app_response.status_code}")
 
 # Main function placeholder
-# def main():
-#     pass
+def main():
+    pass
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
