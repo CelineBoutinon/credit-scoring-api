@@ -28,7 +28,6 @@ def home():
 <p>where ID is the client's unique Home Credit application number (whole number between 1 and 46128)</p>
 '''
 
-
 @app.route('/client/<int:id>', methods=['GET'])
 def api_id(id):
     # Ensure client id exists in test data

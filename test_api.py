@@ -52,7 +52,7 @@ def test_csv_loading():
     df = pd.read_csv('X_test_final.csv')
     assert not df.empty, "Error loading csv file."
 
-# test prediction
+# Test that the prediction returns a default probability
 def test_prediction():
     # Load test data
     df = pd.read_csv('X_test_final.csv')
