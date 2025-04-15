@@ -1,5 +1,4 @@
 # run from the command line with py -m pytest test_api.py -v -s
-# or py -m pytest test_api.py -v -s -W ignore::Warning to ignore the sklearn tags warning
 
 # import os
 # import sys
@@ -7,7 +6,7 @@ import joblib
 import pandas as pd
 # from flask import Flask, jsonify, request
 import app
-# import pytest
+import pytest
 import requests
 import pandas as pd
 from flask import json
