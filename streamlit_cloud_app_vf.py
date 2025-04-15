@@ -18,7 +18,8 @@ st.title("Credit Scoring App!")
 
 # Get user to select client credit application reference
 # selected_value = st.select_slider("Select a client credit application reference:", options=range(1, 46128))
-selected_value = st.number_input("Enter a client credit application reference:", min_value=1, max_value=46128)
+selected_value = st.number_input("Enter a client credit application reference:", min_value=1, max_value=46128,
+                                 key="client_id")
 
 # Display the selected client credit application reference
 st.write(f"You selected client application: {selected_value}")

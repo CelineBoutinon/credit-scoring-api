@@ -8,21 +8,25 @@ import pandas as pd
 import app
 import pytest
 import requests
+import random
 import pandas as pd
 from flask import json
 from app import app
 
 # Base URL for the API
-base_url = "http://127.0.0.1:5000"
+# base_url = "http://127.0.0.1:5000" # for local tests
+base_url = "https://credit-scoring-api-0p1u.onrender.com/" # for cloud app tests
 
 # Test that the prediction endpoint returns a successful response
 def test_prediction():
-    response = requests.get(f"{base_url}/predict/1")
+    random_client_id = random.randint(1, 46128)
+    response = requests.get(f"{base_url}/predict/{random_client_id}")
     assert response.status_code == 200
 
 # Test that the client demographics endpoint returns a successful response
 def test_client_demographics():
-    response = requests.get(f"{base_url}/client/1")
+    random_client_id = random.randint(1, 46128)
+    response = requests.get(f"{base_url}/client/{random_client_id}")
     assert response.status_code == 200
 
 # Test that the client demographics endpoint returns an error for invalid client ID
@@ -37,7 +41,8 @@ def test_prediction_invalid_id():
 
 # Test that the prediction endpoint returns the expected JSON structure
 def test_prediction_json_structure():
-    response = requests.get(f"{base_url}/predict/1")
+    random_client_id = random.randint(1, 46128)
+    response = requests.get(f"{base_url}/predict/{random_client_id}")
     assert response.status_code == 200
     data = response.json()
     expected_keys = ['Client id', 'Client default probability', 'Class', 'Decision', 'Key Decision Factors', 'Expected Shap Value', 'Shap values client']
@@ -56,8 +61,10 @@ def test_prediction():
     # Load test data
     df = pd.read_csv('X_test_final.csv')
 
+    random_client_id = random.randint(1, 46128)
+
     # Get the index from the first row of your test data
-    index_value = df.index[0]  # Get the first index value
+    index_value = df.index[random_client_id]  # Get the first index value
 
     with app.test_client() as client:
         # Make a request to your prediction endpoint, matching your API route
