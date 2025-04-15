@@ -11,3 +11,5 @@ lightgbm==4.5.0
 requests==2.32.3
 matplotlib==3.10.1
 pytest==8.3.5
+streamlit==1.44.1
+streamlit-shap==1.0.2
