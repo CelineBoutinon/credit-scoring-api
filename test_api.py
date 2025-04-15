@@ -1,9 +1,18 @@
+import os
+import sys
+import joblib
+import pandas as pd
 import pytest
-import requests
-import json
+from flask import Flask, jsonify, requests
 
 # Base URL for the API
 base_url = "http://127.0.0.1:5000"
+
+# @pytest.fixture
+# def client():
+#     app.config['TESTING'] = True
+#     with app.test_client() as client:
+#         yield client
 
 # Test that the home page returns a successful response
 def test_home():
@@ -37,3 +46,25 @@ def test_prediction_json_structure():
     data = response.json()
     expected_keys = ['Client id', 'Client default probability', 'Class', 'Decision', 'Key Decision Factors', 'Expected Shap Value', 'Shap values client']
     assert all(key in data for key in expected_keys)
+
+
+def test_model_loading():
+    model = joblib.load('final_model.joblib')
+    assert model is not None, "Error loading model."
+
+def test_csv_loading():
+    df = pd.read_csv('X_test_final.csv')
+    assert not df.empty, "Error loading csv file."
+
+def test_prediction():
+    import os
+    import pandas as pd
+    from flask import json
+    df = pd.read_csv('X_test_final.csv')
+    sk_id_curr = df.iloc[0]['SK_ID_CURR']
+    with app.test_client() as client:
+        response = client.post('/predict', json={'SK_ID_CURR': sk_id_curr})
+        data = json.loads(response.data)
+        prediction = data['probability']
+        assert prediction is not None, "Failed to predict application outcome for client."
+

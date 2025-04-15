@@ -2,7 +2,7 @@ import pytest
 import streamlit as st
 import requests
 import json
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 import responses
 
 # Mock API response
