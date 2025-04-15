@@ -1,6 +1,6 @@
 # To run app locally, navigate to C:\Users\celin\DS Projets Python\OCDS-repos-all\credit-scoring-api>
 # in the command line and run  py -m streamlit run streamlit_cloud_app_vf.py
-# App runs on Streamlit Community Cloud at https://credit-scoring-app-0p1u.streamlit.app/
+# App runs on Streamlit Community Cloud at https://credit-scoring-api-f6g7yxlaqnt3qhu7rk7rkf.streamlit.app/
 # IMPORTANT: In advanced settings, choose Python 3.10 when deploying the app in Streamlit Community Cloud
 # to avoid errors related to distutils (discontinued from Python 3.12 onwards).
 

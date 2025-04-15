@@ -1,4 +1,4 @@
-# launch app locally by running flask --app api.py run --debug from the command line
+# launch app locally by running flask --app app.py run --debug from the command line
 # web app available at https://credit-scoring-api-0p1u.onrender.com
 
 
