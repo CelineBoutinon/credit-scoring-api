@@ -42,7 +42,8 @@ def test_prediction_json_structure():
     response = requests.get(f"{base_url}/predict/{random_client_id}")
     assert response.status_code == 200
     data = response.json()
-    expected_keys = ['Client id', 'Client default probability', 'Class', 'Decision', 'Key Decision Factors', 'Expected Shap Value', 'Shap values client']
+    expected_keys = ['Client id', 'Client default probability', 'Class', 'Decision', 'Key Decision Factors',
+                     'Expected Shap Value', 'Shap values client']
     assert all(key in data for key in expected_keys)
 
 # Test that the champion MLFlow model loads
@@ -66,5 +67,3 @@ def test_prediction():
         prediction = data['Client default probability']
         assert prediction is not None, "Failed to predict application outcome for client."
         assert isinstance(prediction, (int, float)), "Prediction should be a number."
-
-
