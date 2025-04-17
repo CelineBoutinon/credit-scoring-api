@@ -8,7 +8,8 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load client test data
-client_data=pd.read_csv('X_test_final.csv')
+# client_data=pd.read_csv('X_test_final.csv')
+client_data=pd.read_csv('test_data_final.csv')
 
 # Load model
 model = load('final_model.joblib')
@@ -22,16 +23,16 @@ def home():
 <p>Welcome to the HOME CREDIT Credit Scoring app.</p>
 <p>- use /client/ID to access client demographics</p>
 <p>- use /predict/ID to retrieve client credit application decision</p>
-<p>where ID is the client's unique Home Credit application number (whole number between 1 and 46128)</p>
+<p>where ID is the client's unique Home Credit application number (whole number between 1 and 48745)</p>
 '''
 
 @app.route('/client/<int:id>', methods=['GET'])
 def api_id(id):
     # Ensure client id exists in test data
     if (id-1) >= client_data.shape[0]:            
-        return "Error: Client id not in application database. Enter a whole number between 1 and 46128.", 404
+        return "Error: Client id not in application database. Enter a whole number between 1 and 48745.", 404
     if ((id-1) < 0):
-        return "Error: Client id not in application database. Enter a whole number between 1 and 46128.", 404
+        return "Error: Client id not in application database. Enter a whole number between 1 and 48745.", 404
     # Display summary client demographics
     result_cols = ['INCOME_TYPE', 'EMPLOYMENT_SECTOR', 'DISPOSABLE_INCOME_per_capita', 'YEAR_BIRTH', 'CREDIT_RATING',
                    'CLIENT_BAD_CREDIT_HISTORY', 'CLIENT_FRAUD_FLAG', 'IS_MALE', 'WHITE_COLLAR', 'UPPER_EDUCATION',
@@ -49,6 +50,11 @@ def api_id(id):
     
 @app.route("/predict/<int:id>", methods=['GET'])
 def predict(id):
+    # Ensure client id exists in test data
+    if (id-1) >= client_data.shape[0]:            
+        return "Error: Client id not in application database. Enter a whole number between 1 and 48745.", 404
+    if ((id-1) < 0):
+        return "Error: Client id not in application database. Enter a whole number between 1 and 48745.", 404
     # Load client data
     client_particulars = client_data.iloc[[id-1]]
     # Predict outcome of client credit application
@@ -62,7 +68,8 @@ def predict(id):
         proba_class = 'no default'
         decision = "grant loan"
     # shap won't work with MLFlow pyfunc model => load pre-calculated Shap values for test data
-    shap_values_all = pd.DataFrame(load('shap_values_test.joblib'))
+    # shap_values_all = pd.DataFrame(load('shap_values_test.joblib'))
+    shap_values_all = pd.read_csv('shap_values_test_data.csv')
     shap_values_client = shap_values_all.iloc[[id-1]]
     abs_values = shap_values_client.abs()
     expected_value = load('expected_value.joblib')

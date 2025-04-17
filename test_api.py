@@ -16,29 +16,29 @@ base_url = "https://credit-scoring-api-0p1u.onrender.com/" # for cloud app tests
 
 # Test that the prediction endpoint returns a successful response
 def test_prediction():
-    random_client_id = random.randint(1, 46128)
+    random_client_id = random.randint(1, 48745)
     response = requests.get(f"{base_url}/predict/{random_client_id}")
     assert response.status_code == 200
 
 # Test that the client demographics endpoint returns a successful response
 def test_client_demographics():
-    random_client_id = random.randint(1, 46128)
+    random_client_id = random.randint(1, 48745)
     response = requests.get(f"{base_url}/client/{random_client_id}")
     assert response.status_code == 200
 
 # Test that the client demographics endpoint returns an error for an invalid client ID
 def test_client_demographics_invalid_id():
-    response = requests.get(f"{base_url}/client/46129")
+    response = requests.get(f"{base_url}/client/88888")
     assert response.status_code == 404
 
 # Test that the prediction endpoint returns an error for an invalid client ID
 def test_prediction_invalid_id():
-    response = requests.get(f"{base_url}/predict/46129")
+    response = requests.get(f"{base_url}/predict/88888")
     assert response.status_code == 500
 
 # Test that the prediction endpoint returns the expected JSON structure
 def test_prediction_json_structure():
-    random_client_id = random.randint(1, 46128)
+    random_client_id = random.randint(1, 48745)
     response = requests.get(f"{base_url}/predict/{random_client_id}")
     assert response.status_code == 200
     data = response.json()
@@ -59,7 +59,7 @@ def test_csv_loading():
 # Test that the prediction returns a default probability and that it is a number
 def test_prediction():
     df = pd.read_csv('X_test_final.csv')
-    random_client_id = random.randint(1, 46128)
+    random_client_id = random.randint(1, 48745)
     index_value = df.index[random_client_id]
     with app.test_client() as client:
         response = client.get(f'/predict/{index_value}')
