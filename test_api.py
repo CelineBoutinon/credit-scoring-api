@@ -34,7 +34,7 @@ def test_client_demographics_invalid_id():
 # Test that the prediction endpoint returns an error for an invalid client ID
 def test_prediction_invalid_id():
     response = requests.get(f"{base_url}/predict/88888")
-    assert response.status_code == 500
+    assert response.status_code == 404
 
 # Test that the prediction endpoint returns the expected JSON structure
 def test_prediction_json_structure():
@@ -53,12 +53,12 @@ def test_model_loading():
 
 # Test that the client test data csv file loads
 def test_csv_loading():
-    df = pd.read_csv('X_test_final.csv')
+    df = pd.read_csv('test_data_final.csv')
     assert not df.empty, "Error loading csv file."
 
 # Test that the prediction returns a default probability and that it is a number
 def test_prediction():
-    df = pd.read_csv('X_test_final.csv')
+    df = pd.read_csv('test_data_final.csv')
     random_client_id = random.randint(1, 48745)
     index_value = df.index[random_client_id]
     with app.test_client() as client:
