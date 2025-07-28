@@ -84,3 +84,7 @@ streamlit==1.44.1
 streamlit-shap==1.0.2    
 
 Voir requirements.txt pour la liste complète des librairies & packages.
+
+## MENTIONS LÉGALES
+
+Cette étude a été produite par CelineBoutinon sur la base du jeu de données Home Credit Default Risk sur Kaggle (https://www.kaggle.com/c/home-credit-default-risk/data). Le jeu de données est fourni « tel quel » et est hébergé sur Kaggle à des fins de recherche et d’éducation ; son utilisation est soumise aux conditions générales de Kaggle ainsi qu’aux termes disponibles sur https://www.kaggle.com/competitions/home-credit-default-risk/rules#7-competition-data. Les utilisateurs des données sont responsables de l’utilisation qu’ils en font et les analyses présentées ici restent la responsabilité seule de l'auteure. Pour plus de détails, veuillez consulter les conditions d’utilisation sur https://www.kaggle.com/terms et https://www.kaggle.com/docs/datasets#licensing.
