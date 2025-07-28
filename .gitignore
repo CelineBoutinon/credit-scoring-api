@@ -184,3 +184,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Other files and folders
+*.docx
+*.pptx
+.ipynb_checkpoints/

@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
-Projet realisé en mars 2025 dans le cadre de ma formation Data Scientist avec OpenClassrooms.
+Projet realisé en mars 2025 dans le cadre de ma formation Data Scientist avec CentraleSupélec/OpenClassrooms.
 
 ## Contexte
 "Prêt à dépenser" est une société financière qui propose des crédits à la consommation pour
@@ -54,11 +54,13 @@ Pour l'EDA et la modélisation, se référer au repo https://github.com/CelineBo
 │
 ├── pytest.ini                   <- Unit tests init file
 │
-├── requirements.txt             <- environment and dependencies
+├── requirements.txt             <- Environment and dependencies
 │
 ├── test_api.py                  <- PyTest unit tests script
 │
-
+│
+├── slideshow.pdf                <- Project presentation
+│
 ```
 
 --------
@@ -80,3 +82,5 @@ matplotlib==3.10.1
 pytest==8.3.5  
 streamlit==1.44.1  
 streamlit-shap==1.0.2    
+
+Voir requirements.txt pour la liste complète des librairies & packages.
